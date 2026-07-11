@@ -1,20 +1,43 @@
-from vectorizer import sentence_to_vector
+import numpy as np
+
 from cosine import cosine_similarity
+from vectorizer import tfidf_vector
 
 
-def semantic_search(query, sentences, vocabulary):
-    query_vector = sentence_to_vector(query, vocabulary)
+def semantic_search(
+        query,
+        sentences,
+        vectors,
+        vocabulary,
+        idf,
+        top_k=3
+):
 
-    best_sentence = ""
-    best_score = -1
+    query_vector = tfidf_vector(
+        query,
+        vocabulary,
+        idf
+    )
 
-    for sentence in sentences:
-        sentence_vector = sentence_to_vector(sentence, vocabulary)
+    scores = []
 
-        score = cosine_similarity(query_vector, sentence_vector)
+    for sentence, vector in zip(
+            sentences,
+            vectors
+    ):
 
-        if score > best_score:
-            best_score = score
-            best_sentence = sentence
+        score = cosine_similarity(
+            query_vector,
+            vector
+        )
 
-    return best_sentence, best_score
+        scores.append(
+            (sentence, score)
+        )
+
+    scores.sort(
+        key=lambda x: x[1],
+        reverse=True
+    )
+
+    return scores[:top_k]

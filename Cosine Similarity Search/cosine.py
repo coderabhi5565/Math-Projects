@@ -1,18 +1,13 @@
-import math
+import numpy as np
 
 
 def cosine_similarity(vector1, vector2):
-    dot_product = 0
+    dot_product = np.dot(vector1, vector2)
 
-    for a, b in zip(vector1, vector2):
-        dot_product += a * b
-
-    magnitude1 = math.sqrt(sum(x * x for x in vector1))
-    magnitude2 = math.sqrt(sum(x * x for x in vector2))
+    magnitude1 = np.linalg.norm(vector1)
+    magnitude2 = np.linalg.norm(vector2)
 
     if magnitude1 == 0 or magnitude2 == 0:
-        return 0
+        return 0.0
 
-    similarity = dot_product / (magnitude1 * magnitude2)
-
-    return similarity
+    return dot_product / (magnitude1 * magnitude2)

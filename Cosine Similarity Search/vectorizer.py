@@ -1,13 +1,23 @@
+import numpy as np
+
 from preprocessing import clean_text
+from tfidf import calculate_tfidf
 
 
-def sentence_to_vector(sentence, vocabulary):
+def count_vector(sentence, vocabulary):
     words = clean_text(sentence)
 
-    vector = []
+    vector = np.zeros(len(vocabulary))
 
-    for vocab_word in vocabulary:
-        count = words.count(vocab_word)
-        vector.append(count)
+    for i, vocab_word in enumerate(vocabulary):
+        vector[i] = words.count(vocab_word)
 
     return vector
+
+
+def tfidf_vector(sentence, vocabulary, idf):
+    return calculate_tfidf(
+        sentence,
+        vocabulary,
+        idf
+    )
